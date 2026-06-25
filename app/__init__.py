@@ -32,10 +32,16 @@ def create_app():
         'style-src': ["'self'", "'unsafe-inline'"],
         'img-src': "'self' data:",
     }
+    # Talisman defaults to HTTPS-only cookies. Over local HTTP that stops the
+    # session cookie (which carries the CSRF token) from being sent back,
+    # which breaks every POST form. Relax it in dev; keep it strict in
+    # production, where the app is served over HTTPS.
+    is_production = os.environ.get('FLASK_ENV') == 'production'
     Talisman(
         app,
         content_security_policy=csp,
-        force_https=False,
+        force_https=is_production,
+        session_cookie_secure=is_production,
     )
 
     init_db_app(app)

@@ -45,6 +45,26 @@ document.addEventListener('DOMContentLoaded', function () {
     activeTopicLink.scrollIntoView({ block: 'nearest' });
   }
 
+  // Notes — toggle between the saved-note display and the edit form.
+  const noteDisplay = document.getElementById('note-display');
+  const noteForm = document.getElementById('note-form');
+  const noteEditBtn = document.getElementById('note-edit-btn');
+  const noteCancelBtn = document.getElementById('note-cancel-btn');
+
+  if (noteEditBtn && noteDisplay && noteForm) {
+    noteEditBtn.addEventListener('click', function () {
+      noteDisplay.hidden = true;
+      noteForm.hidden = false;
+      noteForm.querySelector('textarea').focus();
+    });
+  }
+  if (noteCancelBtn && noteDisplay && noteForm) {
+    noteCancelBtn.addEventListener('click', function () {
+      noteForm.hidden = true;
+      noteDisplay.hidden = false;
+    });
+  }
+
   // Theme toggle — cycles light → dark → hacker → light.
   // The anti-flash script in <head> reads this value on the next page load.
   const themeToggle = document.getElementById('theme-toggle');

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, abort
+from flask import Blueprint, render_template, redirect, url_for, abort, request, flash
 from app.database import get_db
 
 lessons_bp = Blueprint('lessons', __name__)
@@ -39,6 +39,12 @@ def detail(lesson_id):
     tags = [t.strip() for t in lesson['tags'].split(',') if t.strip()] if lesson['tags'] else []
     commands = [c.strip() for c in lesson['commands'].split('\n') if c.strip()] if lesson['commands'] else []
 
+    note_row = db.execute(
+        'SELECT body, updated_at FROM notes WHERE lesson_id = ?', (lesson_id,)
+    ).fetchone()
+    note = note_row['body'] if note_row else ''
+    note_updated = note_row['updated_at'] if note_row else None
+
     return render_template(
         'lesson.html',
         lesson=dict(lesson),
@@ -48,6 +54,8 @@ def detail(lesson_id):
         is_completed=is_completed,
         tags=tags,
         commands=commands,
+        note=note,
+        note_updated=note_updated,
         current_topic_id=topic['id'],
     )
 
@@ -77,3 +85,34 @@ def mark_complete(lesson_id):
 
     db.commit()
     return redirect(url_for('lessons.detail', lesson_id=lesson_id))
+
+
+@lessons_bp.route('/lessons/<int:lesson_id>/note', methods=['POST'])
+def save_note(lesson_id):
+    db = get_db()
+
+    lesson = db.execute('SELECT id FROM lessons WHERE id = ?', (lesson_id,)).fetchone()
+    if lesson is None:
+        abort(404)
+
+    body = request.form.get('body', '').strip()
+
+    existing = db.execute(
+        'SELECT id FROM notes WHERE lesson_id = ?', (lesson_id,)
+    ).fetchone()
+
+    if existing:
+        db.execute(
+            "UPDATE notes SET body = ?, updated_at = datetime('now') WHERE lesson_id = ?",
+            (body, lesson_id)
+        )
+    else:
+        db.execute(
+            "INSERT INTO notes (lesson_id, body, updated_at) VALUES (?, ?, datetime('now'))",
+            (lesson_id, body)
+        )
+
+    db.commit()
+    flash('Note saved.' if body else 'Note cleared.')
+    # Jump straight back to the notes section after saving (PRG pattern).
+    return redirect(url_for('lessons.detail', lesson_id=lesson_id) + '#notes-section')
