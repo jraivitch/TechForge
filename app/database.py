@@ -56,6 +56,14 @@ def init_db():
             completed_at TEXT,
             FOREIGN KEY (lesson_id) REFERENCES lessons (id)
         );
+
+        CREATE TABLE IF NOT EXISTS notes (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            lesson_id  INTEGER NOT NULL UNIQUE,
+            body       TEXT    DEFAULT '',
+            updated_at TEXT,
+            FOREIGN KEY (lesson_id) REFERENCES lessons (id)
+        );
     """)
     db.commit()
 
