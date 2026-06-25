@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson['title'] }} — {{ topic['name'] }} — TechForge{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="{{ url_for('topics.index') }}">Topics</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="{{ url_for('topics.detail', topic_id=topic['id']) }}">{{ topic['name'] }}</a>
+  <span class="breadcrumb-sep">/</span>
+  <span>{{ lesson['title'] }}</span>
+</div>
+
+<!-- Lesson header -->
+<div class="lesson-header">
+  <h1 class="lesson-title">{{ lesson['title'] }}</h1>
+  <div class="lesson-meta">
+    <span class="difficulty-badge difficulty-badge--{{ lesson['difficulty'] }}">{{ lesson['difficulty'] }}</span>
+    <span class="meta-dot">·</span>
+    <svg class="meta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"/>
+    </svg>
+    <span>{{ lesson['estimated_minutes'] }} min</span>
+    {% if tags %}
+    <span class="meta-dot">·</span>
+    {% for tag in tags %}
+    <span class="tag">{{ tag }}</span>
+    {% endfor %}
+    {% endif %}
+    {% if is_completed %}
+    <span class="completed-badge">Completed</span>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Lesson body -->
+<div class="lesson-body">
+
+  <!-- Explanation -->
+  <div class="lesson-section card">
+    <h2 class="lesson-section-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.673.118-2.454.339A.75.75 0 002 4.06v11a.75.75 0 00.954.721A7.506 7.506 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z"/>
+      </svg>
+      Explanation
+    </h2>
+    <div class="lesson-text">{{ lesson['explanation'] }}</div>
+  </div>
+
+  <!-- Real World -->
+  {% if lesson['real_world'] %}
+  <div class="lesson-section card card--accent">
+    <h2 class="lesson-section-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+      </svg>
+      Real World
+    </h2>
+    <div class="lesson-text">{{ lesson['real_world'] }}</div>
+  </div>
+  {% endif %}
+
+  <!-- Commands -->
+  {% if commands %}
+  <div class="lesson-section card">
+    <h2 class="lesson-section-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.832 9l-2.584-1.693a.75.75 0 01.904-1.205l3.255 2.134a.75.75 0 010 1.228L5.152 11.598a.75.75 0 01-1.06-.055zm4.557.748a.75.75 0 000 1.5h4a.75.75 0 000-1.5h-4z" clip-rule="evenodd"/>
+      </svg>
+      Commands
+    </h2>
+    <div class="code-block">
+      {% for cmd in commands %}
+      <div class="code-line"><span class="code-prompt">$</span> {{ cmd }}</div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Code Example -->
+  {% if lesson['code_example'] %}
+  <div class="lesson-section card">
+    <h2 class="lesson-section-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zm4.03 6.28a.75.75 0 00-1.06-1.06L4.97 9.47a.75.75 0 000 1.06l2.25 2.25a.75.75 0 001.06-1.06L6.56 10l1.72-1.72zm4.5-1.06a.75.75 0 10-1.06 1.06L13.44 10l-1.72 1.72a.75.75 0 101.06 1.06l2.25-2.25a.75.75 0 000-1.06l-2.25-2.25z" clip-rule="evenodd"/>
+      </svg>
+      Code Example
+    </h2>
+    <pre class="code-block code-block--pre"><code>{{ lesson['code_example'] }}</code></pre>
+  </div>
+  {% endif %}
+
+  <!-- Quiz -->
+  {% if lesson['quiz_question'] %}
+  <div class="lesson-section card" id="quiz-section">
+    <h2 class="lesson-section-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+      </svg>
+      Quick Quiz
+    </h2>
+    <p class="quiz-question">{{ lesson['quiz_question'] }}</p>
+    <div class="quiz-input-row">
+      <input
+        type="text"
+        id="quiz-input"
+        class="quiz-input"
+        placeholder="Type your answer..."
+        autocomplete="off"
+      />
+      <button class="btn btn--primary" onclick="checkQuiz()">Check Answer</button>
+    </div>
+    <div id="quiz-feedback" class="quiz-feedback" style="display:none;"></div>
+    <span id="quiz-answer-data" data-answer="{{ lesson['quiz_answer'] }}" style="display:none;"></span>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- Bottom navigation -->
+<div class="lesson-nav">
+  <div class="lesson-nav-prev">
+    {% if prev_lesson %}
+    <a href="{{ url_for('lessons.detail', lesson_id=prev_lesson['id']) }}" class="btn btn--ghost">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd"/>
+      </svg>
+      {{ prev_lesson['title'] }}
+    </a>
+    {% endif %}
+  </div>
+
+  <div class="lesson-nav-center">
+    {% if not is_completed %}
+    <form method="POST" action="{{ url_for('lessons.mark_complete', lesson_id=lesson['id']) }}">
+      <button type="submit" class="btn btn--success">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+        </svg>
+        Mark Complete
+      </button>
+    </form>
+    {% else %}
+    <span class="btn btn--done" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+      </svg>
+      Completed
+    </span>
+    {% endif %}
+  </div>
+
+  <div class="lesson-nav-next">
+    {% if next_lesson %}
+    <a href="{{ url_for('lessons.detail', lesson_id=next_lesson['id']) }}" class="btn btn--ghost btn--ghost-right">
+      {{ next_lesson['title'] }}
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+      </svg>
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

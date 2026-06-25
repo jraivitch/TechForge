@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}All Topics — TechForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">All Topics</h1>
+    <p class="page-subtitle">{{ topics|length }} topics available. Pick one and start learning.</p>
+  </div>
+</div>
+
+<div class="card-grid card-grid--3">
+  {% for topic in topics %}
+  <a href="{{ url_for('topics.detail', topic_id=topic['id']) }}" class="topic-card topic-card--link">
+    <div class="topic-card-header">
+      <span class="topic-emoji">{{ topic['icon'] }}</span>
+      <span class="difficulty-badge difficulty-badge--{{ topic['difficulty'] }}">{{ topic['difficulty'] }}</span>
+    </div>
+    <h3 class="topic-card-title">{{ topic['name'] }}</h3>
+    <p class="topic-card-desc">{{ topic['description'] }}</p>
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ topic['percentage'] }}%"></div>
+      </div>
+      <div class="progress-label">
+        <span>{{ topic['completed'] }}/{{ topic['total'] }} lessons</span>
+        <span>{{ topic['percentage'] }}%</span>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

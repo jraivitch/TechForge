@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ topic['name'] }} — TechForge{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="{{ url_for('topics.index') }}">Topics</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{{ topic['name'] }}</span>
+  </div>
+  <div class="topic-hero">
+    <span class="topic-emoji topic-emoji--lg">{{ topic['icon'] }}</span>
+    <div>
+      <h1 class="page-title">{{ topic['name'] }}</h1>
+      <p class="page-subtitle">{{ topic['description'] }}</p>
+      <span class="difficulty-badge difficulty-badge--{{ topic['difficulty'] }}">{{ topic['difficulty'] }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Progress summary -->
+<div class="progress-summary card">
+  <div class="progress-summary-info">
+    <span class="progress-big-number">{{ progress }}%</span>
+    <span class="progress-summary-label">{{ completed }} of {{ total }} lessons complete</span>
+  </div>
+  <div class="progress-bar progress-bar--lg">
+    <div class="progress-fill" style="width: {{ progress }}%"></div>
+  </div>
+</div>
+
+<!-- Lesson list -->
+<section class="section">
+  <h2 class="section-title">Lessons</h2>
+  <div class="lesson-list">
+    {% for lesson in lessons %}
+    <a href="{{ url_for('lessons.detail', lesson_id=lesson['id']) }}"
+       class="lesson-row {% if lesson['completed'] %}lesson-row--done{% endif %}">
+      <div class="lesson-row-left">
+        <div class="lesson-check {% if lesson['completed'] %}lesson-check--done{% endif %}">
+          {% if lesson['completed'] %}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+          </svg>
+          {% else %}
+          <span>{{ loop.index }}</span>
+          {% endif %}
+        </div>
+        <div>
+          <div class="lesson-row-title">{{ lesson['title'] }}</div>
+          <div class="lesson-row-meta">
+            <span class="difficulty-badge difficulty-badge--{{ lesson['difficulty'] }}">{{ lesson['difficulty'] }}</span>
+            <span class="meta-dot">·</span>
+            <span class="meta-time">{{ lesson['estimated_minutes'] }} min</span>
+            {% if lesson['tags'] %}
+            <span class="meta-dot">·</span>
+            {% for tag in lesson['tags'].split(',') %}{% if tag.strip() %}<span class="tag tag--sm">{{ tag.strip() }}</span>{% endif %}{% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <svg class="lesson-row-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+      </svg>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
