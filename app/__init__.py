@@ -1,17 +1,42 @@
 import os
 from flask import Flask
+from flask_talisman import Talisman
+from flask_wtf.csrf import CSRFProtect
 from .database import get_db, init_app as init_db_app
+
+csrf = CSRFProtect()
 
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
 
+    secret = os.environ.get('SECRET_KEY')
+    if not secret:
+        if os.environ.get('FLASK_ENV') == 'production':
+            raise RuntimeError('SECRET_KEY environment variable must be set in production')
+        secret = 'dev-only-do-not-use-in-production'
+
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY=secret,
         DATABASE=os.path.join(app.instance_path, 'techforge.db'),
+        WTF_CSRF_TIME_LIMIT=3600,
     )
 
     os.makedirs(app.instance_path, exist_ok=True)
+
+    csrf.init_app(app)
+
+    csp = {
+        'default-src': "'self'",
+        'script-src': ["'self'", "'unsafe-inline'"],
+        'style-src': ["'self'", "'unsafe-inline'"],
+        'img-src': "'self' data:",
+    }
+    Talisman(
+        app,
+        content_security_policy=csp,
+        force_https=False,
+    )
 
     init_db_app(app)
 
