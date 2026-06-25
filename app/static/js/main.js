@@ -45,20 +45,21 @@ document.addEventListener('DOMContentLoaded', function () {
     activeTopicLink.scrollIntoView({ block: 'nearest' });
   }
 
-  // Theme toggle — flip the data-theme attribute and remember the choice.
+  // Theme toggle — cycles light → dark → hacker → light.
   // The anti-flash script in <head> reads this value on the next page load.
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', function () {
       const root = document.documentElement;
-      const goingDark = root.getAttribute('data-theme') !== 'dark';
-      if (goingDark) {
-        root.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
+      const cycle = ['light', 'dark', 'hacker'];
+      const current = root.getAttribute('data-theme') || 'light';
+      const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+      if (next === 'light') {
         root.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
+      } else {
+        root.setAttribute('data-theme', next);
       }
+      localStorage.setItem('theme', next);
     });
   }
 });
