@@ -6,7 +6,7 @@ search_bp = Blueprint('search', __name__)
 
 @search_bp.route('/search')
 def search():
-    query = request.args.get('q', '').strip()
+    query = request.args.get('q', '').strip()[:200]
 
     if not query:
         return render_template('search.html', topic_results=[], lesson_results=[], query='')
