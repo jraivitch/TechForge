@@ -36,6 +36,33 @@
   --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Menlo, monospace;
 }
 
+/* ── Dark theme ───────────────────────────────────────────────
+   Activated by data-theme="dark" on the <html> element.
+   We only redefine the color variables here — every component
+   reads from these vars, so the whole UI recolors automatically. */
+:root[data-theme="dark"] {
+  --sidebar-bg:       #0b1120;   /* darkest layer */
+  --sidebar-border:   #1e293b;
+  --sidebar-hover:    #1e293b;
+  --sidebar-active-bg:#1e1b4b;
+
+  --bg:               #0f172a;   /* page background (mid layer) */
+  --card-bg:          #1e293b;   /* cards (lightest layer — elevation) */
+  --border:           #334155;
+  --shadow:           0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+
+  --text:             #f1f5f9;
+  --text-2:           #cbd5e1;
+  --text-3:           #94a3b8;
+}
+
+/* A few components hardcode light colors — override them for dark. */
+:root[data-theme="dark"] .code-block { background: #020617; border: 1px solid var(--border); }
+:root[data-theme="dark"] .tag        { background: #1e293b; }
+:root[data-theme="dark"] .btn--done  { background: #334155; color: var(--text-3); }
+:root[data-theme="dark"] .card--accent { background: #1e1b4b; border-color: #312e81; }
+:root[data-theme="dark"] .topic-card--link:hover { box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+
 html { font-size: 16px; }
 
 body {
@@ -52,13 +79,13 @@ a { text-decoration: none; color: inherit; }
 /* ── Sidebar ──────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-w);
-  min-height: 100vh;
+  height: 100vh;
   background: var(--sidebar-bg);
   position: fixed;
   top: 0; left: 0;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   z-index: 100;
   border-right: 1px solid var(--sidebar-border);
 }
@@ -158,12 +185,17 @@ a { text-decoration: none; color: inherit; }
   color: #475569;
 }
 
-/* Topic list */
+/* Topic list — the only part of the sidebar that scrolls, so the
+   footer below stays pinned. flex:1 makes it absorb free space;
+   min-height:0 is required for a flex child to actually scroll. */
 .sidebar-topics {
   padding: 0 12px 24px;
   display: flex;
   flex-direction: column;
   gap: 1px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .topic-item {
@@ -185,6 +217,42 @@ a { text-decoration: none; color: inherit; }
 
 .topic-icon { font-size: .875rem; flex-shrink: 0; }
 .topic-name { overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Sidebar footer / theme toggle ────────────────────────── */
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 12px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  font-size: .8125rem;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+
+.theme-toggle:hover { background: var(--sidebar-hover); color: #e2e8f0; }
+.theme-toggle svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Show the moon + "Dark mode" in light theme, sun + "Light mode" in dark.
+   Driven purely by CSS so the label is always correct, even before JS runs. */
+.theme-toggle .icon-sun,
+.theme-toggle .label-light { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon,
+:root[data-theme="dark"] .theme-toggle .label-dark { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .label-light { display: inline; }
 
 /* ── Main content ─────────────────────────────────────────── */
 .main-content {
@@ -738,7 +806,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 800px) {
-  .sidebar { width: 100%; min-height: auto; position: static; }
+  .sidebar { width: 100%; height: auto; position: static; overflow: visible; }
+  .sidebar-topics { overflow-y: visible; }
   .main-content { margin-left: 0; padding: 20px 16px; }
   .card-grid--3, .card-grid--4 { grid-template-columns: 1fr 1fr; }
   .lesson-nav { grid-template-columns: 1fr; }

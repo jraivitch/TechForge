@@ -44,4 +44,21 @@ document.addEventListener('DOMContentLoaded', function () {
   if (activeTopicLink) {
     activeTopicLink.scrollIntoView({ block: 'nearest' });
   }
+
+  // Theme toggle — flip the data-theme attribute and remember the choice.
+  // The anti-flash script in <head> reads this value on the next page load.
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      const root = document.documentElement;
+      const goingDark = root.getAttribute('data-theme') !== 'dark';
+      if (goingDark) {
+        root.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        root.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
 });
