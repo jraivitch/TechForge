@@ -63,6 +63,56 @@
 :root[data-theme="dark"] .card--accent { background: #1e1b4b; border-color: #312e81; }
 :root[data-theme="dark"] .topic-card--link:hover { box-shadow: 0 4px 14px rgba(0,0,0,.45); }
 
+/* ── Leet Hacker theme ────────────────────────────────────────
+   Activated by data-theme="hacker" on the <html> element.
+   Bright green (#00ff41) on solid black — classic terminal aesthetic. */
+:root[data-theme="hacker"] {
+  --sidebar-bg:       #000000;
+  --sidebar-border:   #00ff41;
+  --sidebar-text:     #00cc33;
+  --sidebar-hover:    #001a08;
+  --sidebar-active:   #00ff41;
+  --sidebar-active-bg:#001a08;
+
+  --bg:               #000000;
+  --card-bg:          #040404;
+  --border:           #00ff41;
+  --shadow:           0 1px 3px rgba(0,255,65,.2), 0 1px 2px rgba(0,255,65,.1);
+
+  --primary:          #00ff41;
+  --primary-hover:    #00cc33;
+  --primary-light:    #001a08;
+  --success:          #00ff41;
+  --success-hover:    #00cc33;
+  --success-light:    #001a08;
+  --warning:          #ffff00;
+  --error:            #ff4444;
+
+  --text:             #00ff41;
+  --text-2:           #00cc33;
+  --text-3:           #009922;
+
+  --font: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Menlo, monospace;
+}
+
+:root[data-theme="hacker"] .code-block { background: #000000; border: 1px solid #00ff41; color: #00ff41; }
+:root[data-theme="hacker"] .code-prompt { color: #00ff41; }
+:root[data-theme="hacker"] .tag { background: #001a08; color: #00ff41; border-color: #00ff41; }
+:root[data-theme="hacker"] .btn--done { background: #001a08; color: #009922; }
+:root[data-theme="hacker"] .card--accent { background: #001a08; border-color: #00ff41; }
+:root[data-theme="hacker"] .topic-card--link:hover { box-shadow: 0 4px 14px rgba(0,255,65,.35); }
+:root[data-theme="hacker"] .brand-icon { filter: drop-shadow(0 0 8px rgba(0,255,65,.9)); }
+:root[data-theme="hacker"] .brand-link { color: #00ff41; }
+:root[data-theme="hacker"] .search-wrap { background: #040404; border-color: #00ff41; }
+:root[data-theme="hacker"] .search-wrap input { color: #00ff41; }
+:root[data-theme="hacker"] .search-wrap input::placeholder { color: #009922; }
+:root[data-theme="hacker"] .difficulty-badge--beginner { background: #001a08; color: #00ff41; }
+:root[data-theme="hacker"] .difficulty-badge--intermediate { background: #001a08; color: #00ff41; }
+:root[data-theme="hacker"] .difficulty-badge--advanced { background: #001a08; color: #00ff41; }
+:root[data-theme="hacker"] .completed-badge { background: #001a08; color: #00ff41; }
+:root[data-theme="hacker"] .quiz-feedback--correct { background: #001a08; color: #00ff41; border-color: #00ff41; }
+:root[data-theme="hacker"] .quiz-feedback--incorrect { background: #001a08; color: #ff4444; border-color: #ff4444; }
+
 html { font-size: 16px; }
 
 body {
@@ -245,14 +295,27 @@ a { text-decoration: none; color: inherit; }
 .theme-toggle:hover { background: var(--sidebar-hover); color: #e2e8f0; }
 .theme-toggle svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-/* Show the moon + "Dark mode" in light theme, sun + "Light mode" in dark.
-   Driven purely by CSS so the label is always correct, even before JS runs. */
+/* Three-way theme toggle: light → dark → hacker → light.
+   Each state shows the icon/label for the NEXT theme in the cycle.
+   Driven purely by CSS so the label is correct even before JS runs. */
 .theme-toggle .icon-sun,
-.theme-toggle .label-light { display: none; }
+.theme-toggle .icon-leet,
+.theme-toggle .label-light,
+.theme-toggle .label-leet { display: none; }
+
 :root[data-theme="dark"] .theme-toggle .icon-moon,
-:root[data-theme="dark"] .theme-toggle .label-dark { display: none; }
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-:root[data-theme="dark"] .theme-toggle .label-light { display: inline; }
+:root[data-theme="dark"] .theme-toggle .icon-sun,
+:root[data-theme="dark"] .theme-toggle .label-dark,
+:root[data-theme="dark"] .theme-toggle .label-light { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-leet { display: block; }
+:root[data-theme="dark"] .theme-toggle .label-leet { display: inline; }
+
+:root[data-theme="hacker"] .theme-toggle .icon-moon,
+:root[data-theme="hacker"] .theme-toggle .icon-leet,
+:root[data-theme="hacker"] .theme-toggle .label-dark,
+:root[data-theme="hacker"] .theme-toggle .label-leet { display: none; }
+:root[data-theme="hacker"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="hacker"] .theme-toggle .label-light { display: inline; }
 
 /* ── Main content ─────────────────────────────────────────── */
 .main-content {
