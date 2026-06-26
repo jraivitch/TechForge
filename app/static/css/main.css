@@ -724,6 +724,34 @@ a { text-decoration: none; color: inherit; }
   white-space: pre-line;
 }
 
+/* ── Deeper learning sections ─────────────────────────────── */
+/* Accent via a left border + tinted icon so they read clearly on
+   every theme (light, dark, hacker) without theme-breaking fills. */
+.card--analogy   { border-left: 3px solid var(--primary); }
+.card--takeaways { border-left: 3px solid var(--success); }
+.card--pitfalls  { border-left: 3px solid var(--warning); }
+
+.card--analogy   .lesson-section-title svg { color: var(--primary); }
+.card--takeaways .lesson-section-title svg { color: var(--success); }
+.card--pitfalls  .lesson-section-title svg { color: var(--warning); }
+
+.lesson-steps,
+.lesson-pitfalls,
+.lesson-takeaways {
+  margin: 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: .9375rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.lesson-steps li::marker    { color: var(--primary); font-weight: 700; }
+.lesson-takeaways li::marker { color: var(--success); }
+.lesson-pitfalls li::marker  { color: var(--warning); }
+
 /* Code blocks */
 .code-block {
   background: #0f172a;
