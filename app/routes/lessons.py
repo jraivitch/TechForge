@@ -39,6 +39,14 @@ def detail(lesson_id):
     tags = [t.strip() for t in lesson['tags'].split(',') if t.strip()] if lesson['tags'] else []
     commands = [c.strip() for c in lesson['commands'].split('\n') if c.strip()] if lesson['commands'] else []
 
+    # Deeper-content sections stored as newline-separated text -> lists.
+    def as_list(field):
+        return [x.strip() for x in field.split('\n') if x.strip()] if field else []
+
+    steps = as_list(lesson['steps'])
+    pitfalls = as_list(lesson['pitfalls'])
+    takeaways = as_list(lesson['takeaways'])
+
     note_row = db.execute(
         'SELECT body, updated_at FROM notes WHERE lesson_id = ?', (lesson_id,)
     ).fetchone()
@@ -54,6 +62,9 @@ def detail(lesson_id):
         is_completed=is_completed,
         tags=tags,
         commands=commands,
+        steps=steps,
+        pitfalls=pitfalls,
+        takeaways=takeaways,
         note=note,
         note_updated=note_updated,
         current_topic_id=topic['id'],

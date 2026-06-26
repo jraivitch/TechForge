@@ -45,6 +45,10 @@ def init_db():
             difficulty         TEXT    DEFAULT 'beginner',
             estimated_minutes  INTEGER DEFAULT 10,
             tags               TEXT    DEFAULT '',
+            analogy            TEXT    DEFAULT '',
+            steps              TEXT    DEFAULT '',
+            pitfalls           TEXT    DEFAULT '',
+            takeaways          TEXT    DEFAULT '',
             order_index        INTEGER DEFAULT 0,
             FOREIGN KEY (topic_id) REFERENCES topics (id)
         );
@@ -65,6 +69,15 @@ def init_db():
             FOREIGN KEY (lesson_id) REFERENCES lessons (id)
         );
     """)
+
+    # Additive migration: add deeper-content columns to lessons if an older
+    # database is missing them. CREATE TABLE IF NOT EXISTS won't alter an
+    # existing table, so we add columns explicitly. Safe to run repeatedly.
+    existing_cols = {row[1] for row in db.execute('PRAGMA table_info(lessons)')}
+    for col in ('analogy', 'steps', 'pitfalls', 'takeaways'):
+        if col not in existing_cols:
+            db.execute(f"ALTER TABLE lessons ADD COLUMN {col} TEXT DEFAULT ''")
+
     db.commit()
 
 
