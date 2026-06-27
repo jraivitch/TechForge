@@ -47,6 +47,7 @@ def init_db():
             tags               TEXT    DEFAULT '',
             analogy            TEXT    DEFAULT '',
             steps              TEXT    DEFAULT '',
+            step_codes         TEXT    DEFAULT '',
             pitfalls           TEXT    DEFAULT '',
             takeaways          TEXT    DEFAULT '',
             order_index        INTEGER DEFAULT 0,
@@ -74,7 +75,7 @@ def init_db():
     # database is missing them. CREATE TABLE IF NOT EXISTS won't alter an
     # existing table, so we add columns explicitly. Safe to run repeatedly.
     existing_cols = {row[1] for row in db.execute('PRAGMA table_info(lessons)')}
-    for col in ('analogy', 'steps', 'pitfalls', 'takeaways'):
+    for col in ('analogy', 'steps', 'step_codes', 'pitfalls', 'takeaways'):
         if col not in existing_cols:
             db.execute(f"ALTER TABLE lessons ADD COLUMN {col} TEXT DEFAULT ''")
 

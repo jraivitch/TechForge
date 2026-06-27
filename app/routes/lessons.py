@@ -44,6 +44,14 @@ def detail(lesson_id):
         return [x.strip() for x in field.split('\n') if x.strip()] if field else []
 
     steps = as_list(lesson['steps'])
+
+    raw_step_codes = lesson['step_codes'] if lesson['step_codes'] else ''
+    step_codes_split = raw_step_codes.split('|||') if raw_step_codes else []
+    # Pad to match steps length so zip works cleanly; missing entries = no code block
+    while len(step_codes_split) < len(steps):
+        step_codes_split.append('')
+    steps_with_code = list(zip(steps, step_codes_split))
+
     pitfalls = as_list(lesson['pitfalls'])
     takeaways = as_list(lesson['takeaways'])
 
@@ -63,6 +71,7 @@ def detail(lesson_id):
         tags=tags,
         commands=commands,
         steps=steps,
+        steps_with_code=steps_with_code,
         pitfalls=pitfalls,
         takeaways=takeaways,
         note=note,
