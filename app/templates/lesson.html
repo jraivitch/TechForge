@@ -62,7 +62,7 @@
   </div>
 
   <!-- Step by Step -->
-  {% if steps %}
+  {% if steps_with_code %}
   <div class="lesson-section card">
     <h2 class="lesson-section-title">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -70,9 +70,14 @@
       </svg>
       Step by Step
     </h2>
-    <ol class="lesson-steps">
-      {% for step in steps %}
-      <li>{{ step }}</li>
+    <ol class="lesson-steps lesson-steps--rich">
+      {% for step, code in steps_with_code %}
+      <li class="lesson-step">
+        <span class="step-text">{{ step }}</span>
+        {% if code %}
+        <pre class="step-code"><code>{{ code }}</code></pre>
+        {% endif %}
+      </li>
       {% endfor %}
     </ol>
   </div>

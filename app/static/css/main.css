@@ -57,7 +57,8 @@
 }
 
 /* A few components hardcode light colors — override them for dark. */
-:root[data-theme="dark"] .code-block { background: #020617; border: 1px solid var(--border); }
+:root[data-theme="dark"] .code-block  { background: #020617; border: 1px solid var(--border); }
+:root[data-theme="dark"] .step-code   { background: #020617; border: 1px solid var(--border); }
 :root[data-theme="dark"] .tag        { background: #1e293b; }
 :root[data-theme="dark"] .btn--done  { background: #334155; color: var(--text-3); }
 :root[data-theme="dark"] .card--accent { background: #1e1b4b; border-color: #312e81; }
@@ -96,6 +97,7 @@
 }
 
 :root[data-theme="hacker"] .code-block { background: #000000; border: 1px solid #00ff41; color: #00ff41; }
+:root[data-theme="hacker"] .step-code  { background: #000000; border: 1px solid #00ff41; color: #00ff41; }
 :root[data-theme="hacker"] .code-prompt { color: #00ff41; }
 :root[data-theme="hacker"] .tag { background: #001a08; color: #00ff41; border-color: #00ff41; }
 :root[data-theme="hacker"] .btn--done { background: #001a08; color: #009922; }
@@ -751,6 +753,53 @@ a { text-decoration: none; color: inherit; }
 .lesson-steps li::marker    { color: var(--primary); font-weight: 700; }
 .lesson-takeaways li::marker { color: var(--success); }
 .lesson-pitfalls li::marker  { color: var(--warning); }
+
+.lesson-steps--rich { padding-left: 0; list-style: none; gap: 0; }
+
+.lesson-step {
+  counter-increment: step-counter;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0 14px 36px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.lesson-step:last-child { border-bottom: none; }
+
+.lesson-step::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lesson-steps--rich { counter-reset: step-counter; }
+
+.step-text { color: var(--text-2); line-height: 1.6; }
+
+.step-code {
+  background: #0f172a;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  color: #e2e8f0;
+  line-height: 1.65;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
 
 /* Code blocks */
 .code-block {
